@@ -1,10 +1,15 @@
 import { useEffect, useRef } from 'react';
 import './App.css';
 import { useState } from 'react';
-import { ml5 } from 'ml5';
+//import { ml5 } from 'ml5';
 import useInterval from '@use-it/interval';
+import { Watch } from 'react-loader-spinner';
+import Chart from './components/Chart';
+import Alunos from './components/Alunos';
 
 let classifier;
+
+let ml5: any;
 
 function App() {
   const videoRef = useRef();
@@ -13,7 +18,11 @@ function App() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    classifier = ml5.imageClassifier("./model/model.json", () => {
+    ml5 = require('ml5')
+  }, []);
+
+  useEffect(() => {
+    classifier = ml5.imageClassifier("../public/model/model.json", () => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
         .then((stream) => {
@@ -43,7 +52,41 @@ function App() {
   }
 
   return (
-    <h1>hello world</h1>
+    <div className="container">
+      <Watch
+        //type="Watch"
+        color="#00BFFF"
+        height={200}
+        width={200}
+        visible={!loaded}
+        style={{ display: 'flex', justifyContent: 'center', marginTop: '30px' }}
+      />
+      <div className="upper">
+        <div className="capture">
+          <video
+            ref={videoRef}
+            style={{ transform: "scale(-1, 1)" }}
+            width="300"
+            height="150"
+          />
+          {loaded && (
+            <button onClick={() => toggle()}>
+              {start ? "Stop" : "Start"}
+            </button>
+          )}
+        </div>
+        {result.length > 0 && (
+          <div>
+            <Chart data={result[0]} />
+          </div>
+        )}
+      </div>
+      {result.length > 0 && (
+        <div className="results">
+          <Alunos data={result} />
+        </div>
+      )}
+    </div>
   );
 }
 

@@ -1,15 +1,15 @@
-import { useEffect, useRef } from 'react';
-import './App.css';
-import { useState } from 'react';
-//import { ml5 } from 'ml5';
+import React, { useEffect, useRef, useState } from "react";
+import ml5 from "ml5";
+import Loader from 'react-loader-spinner';
 import useInterval from '@use-it/interval';
-import { Watch } from 'react-loader-spinner';
-import Chart from './components/Chart';
-import Alunos from './components/Alunos';
+
+import Aluno from './Aluno';
+import Chart from './Chart';
+
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import "./App.css";
 
 let classifier;
-
-let ml5: any;
 
 function App() {
   const videoRef = useRef();
@@ -18,11 +18,7 @@ function App() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    ml5 = require('ml5')
-  }, []);
-
-  useEffect(() => {
-    classifier = ml5.imageClassifier("../public/model/model.json", () => {
+    classifier = ml5.imageClassifier("./model/model.json", () => {
       navigator.mediaDevices
         .getUserMedia({ video: true, audio: false })
         .then((stream) => {
@@ -53,8 +49,8 @@ function App() {
 
   return (
     <div className="container">
-      <Watch
-        //type="Watch"
+      <Loader
+        type="Watch"
         color="#00BFFF"
         height={200}
         width={200}
@@ -71,7 +67,7 @@ function App() {
           />
           {loaded && (
             <button onClick={() => toggle()}>
-              {start ? "Stop" : "Start"}
+              {start ? "Parar" : "Iniciar"}
             </button>
           )}
         </div>
@@ -83,7 +79,7 @@ function App() {
       </div>
       {result.length > 0 && (
         <div className="results">
-          <Alunos data={result} />
+          <Aluno data={result} />
         </div>
       )}
     </div>

@@ -11,7 +11,6 @@
     "@testing-library/user-event": "^13.2.1",
     "@use-it/interval": "^1.0.0",
     "framer-motion": "^10.12.16",
-    "ml5": "^0.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.4.1",
